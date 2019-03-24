@@ -24,7 +24,4 @@ public class XCoord {
 		this.value = value;
 	}
 	
-
-	
-	
 }

@@ -12,8 +12,8 @@ public class Envelop {
 		int largest = 0;
 		
 		for (Coord i : coords) {
-			if (i.x > largest) {
-				largest = i.x;
+			if (i.getX() > largest) {
+				largest = i.getX();
 			}
 		}
 		
@@ -24,8 +24,8 @@ public class Envelop {
 		int largest = 0;
 		
 		for (Coord i : coords) {
-			if (i.y > largest) {
-				largest = i.y;
+			if (i.getY() > largest) {
+				largest = i.getY();
 			}
 		}
 		
@@ -41,37 +41,37 @@ public class Envelop {
 		
 		for (Coord newPosition : coords) {
 			// Determine the way the line moves
-			if (currentPosition.y < newPosition.y) {
+			if (currentPosition.getY() < newPosition.getY()) {
 				// going up in graph
-				drawing[currentPosition.y][currentPosition.x] = "+";
+				drawing[currentPosition.getY()][currentPosition.getX()] = "+";
 				
-				for (int i = currentPosition.y + 1; i < newPosition.y - 1; i++) {
-					drawing[i][currentPosition.x] = "|";
+				for (int i = currentPosition.getY() + 1; i < newPosition.getY() - 1; i++) {
+					drawing[i][currentPosition.getX()] = "|";
 				}
 				
-				drawing[currentPosition.y][currentPosition.x] = "+";
+				drawing[currentPosition.getY()][currentPosition.getX()] = "+";
 				
 				currentPosition = newPosition;
-			} else if (currentPosition.y > newPosition.y) {
+			} else if (currentPosition.getY() > newPosition.getY()) {
 				// going down in graph
-				drawing[currentPosition.y][currentPosition.x] = "+";
+				drawing[currentPosition.getY()][currentPosition.getX()] = "+";
 				
-				for (int i = currentPosition.y - 1; i > newPosition.y - 1; i--) {
-					drawing[i][currentPosition.x] = "|";
+				for (int i = currentPosition.getY() - 1; i > newPosition.getY() - 1; i--) {
+					drawing[i][currentPosition.getX()] = "|";
 				}
 				
-				drawing[currentPosition.y][currentPosition.x] = "+";
+				drawing[currentPosition.getY()][currentPosition.getX()] = "+";
 				
 				currentPosition = newPosition;	
-			} else if (currentPosition.x < newPosition.x) {
+			} else if (currentPosition.getX() < newPosition.getX()) {
 				// going right in graph
-				drawing[currentPosition.y][currentPosition.x] = "+";
+				drawing[currentPosition.getY()][currentPosition.getX()] = "+";
 				
-				for (int i = currentPosition.x + 1; i < newPosition.x - 1; i++) {
-					drawing[currentPosition.y][i] = "--";
+				for (int i = currentPosition.getX() + 1; i < newPosition.getX() - 1; i++) {
+					drawing[currentPosition.getY()][i] = "--";
 				}
 				
-				drawing[currentPosition.y][currentPosition.x] = "-+";
+				drawing[currentPosition.getY()][currentPosition.getX()] = "-+";
 			}
 		}
 		
