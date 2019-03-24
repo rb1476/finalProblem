@@ -7,10 +7,10 @@ public class Graph {
 		this.bars = bars;
 	}
 	
-	public List<XCoord> getXCoords(List<Bar> values) {
+	public List<XCoord> getXCoords() {
 		List<XCoord> newValues = new ArrayList<XCoord>();
 		
-		for (Bar i : values) {
+		for (Bar i : bars) {
 			XCoord start = new XCoord(i, i.startX);
 			XCoord end = new XCoord(i, i.endX);
 			newValues.add(start);
@@ -20,7 +20,7 @@ public class Graph {
 		return newValues;
 	}
 	
-	public void sortXCoords(List<XCoord> values) {
+	public static void sortXCoords(List<XCoord> values) {
 		values.sort(Comparator.comparing(XCoord::getValue));
 	}
 	
