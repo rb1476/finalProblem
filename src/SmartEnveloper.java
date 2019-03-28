@@ -3,9 +3,8 @@ import java.util.*;
 public class SmartEnveloper extends Enveloper {
     @Override
     public Envelop createEnvelop(Graph g) {
-        // Retreive and sort the graph's x coords
+        // Retrieve and sort the graph's x coords
         List<XCoord> xCoords = g.getXCoords();
-        Graph.sortXCoords(xCoords);
 
         // Prepare lists for the algorithm
         Set<Bar> openBars = new HashSet<Bar>();
@@ -21,17 +20,17 @@ public class SmartEnveloper extends Enveloper {
         for (XCoord xCoord : xCoords) {            
             // Is this xCoord's bar higher than the current height?
             // If so, our envelop must go upwards
-            if (xCoord.getBar().height > currentHeight) {
+            if (xCoord.getBar().getHeight() > currentHeight) {
                 // Add the point before we go up, and the point after we go up
                 resultPoints.add(new Coord(xCoord.getValue(), currentHeight));
-                currentHeight = xCoord.getBar().height;
+                currentHeight = xCoord.getBar().getHeight();
                 resultPoints.add(new Coord(xCoord.getValue(), currentHeight));
 
                 // Add this xCoord's bar to the set of bars which are open
                 openBars.add(xCoord.getBar());
             }
             // Is this xCoord's bar lower or the same as the current height?
-            else if (xCoord.getBar().height <= currentHeight) {
+            else if (xCoord.getBar().getHeight() <= currentHeight) {
                 // Is this the end of the current highest bar?
                 if (openBars.contains(xCoord.getBar())) {
                     // Remove this bar from the set of bars which are open
@@ -41,8 +40,8 @@ public class SmartEnveloper extends Enveloper {
                     // we need to descend to
                     int highestBarHeight = 0;
                     for (Bar bar : openBars) {
-                        if (bar.height > highestBarHeight) {
-                            highestBarHeight = bar.height;
+                        if (bar.getHeight() > highestBarHeight) {
+                            highestBarHeight = bar.getHeight();
                         }
                     }
 

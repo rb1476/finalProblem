@@ -2,7 +2,7 @@ import java.util.*;
 import java.lang.StringBuilder;
 
 public class Envelop {
-	List<Coord> coords;
+	private List<Coord> coords;
 	
 	public Envelop(List<Coord> coords) {
 		this.coords = coords;
@@ -32,6 +32,14 @@ public class Envelop {
 		return largest;
 	}
 	
+	public List<Coord> getCoords() {
+		return coords;
+	}
+	
+	public void setCoords(List<Coord> coords) {
+		this.coords = coords;
+	}
+	
 	public String toString() {
 		final int HEIGHT = maxYCoord();
 		final int WIDTH = maxXCoord();
@@ -40,9 +48,9 @@ public class Envelop {
 		Coord currentPosition = new Coord(0, 0);
 		
 		for (Coord newPosition : coords) {
-			// Determine the way the line moves
+			//determine the way the line moves
 			if (currentPosition.getY() < newPosition.getY()) {
-				// going up in graph
+				//going up in graph
 				drawing[currentPosition.getY()][currentPosition.getX()] = "+";
 				
 				for (int i = currentPosition.getY() + 1; i < newPosition.getY() - 1; i++) {
@@ -53,7 +61,7 @@ public class Envelop {
 				
 				currentPosition = newPosition;
 			} else if (currentPosition.getY() > newPosition.getY()) {
-				// going down in graph
+				//going down in graph
 				drawing[currentPosition.getY()][currentPosition.getX()] = "+";
 				
 				for (int i = currentPosition.getY() - 1; i > newPosition.getY() - 1; i--) {
@@ -64,7 +72,7 @@ public class Envelop {
 				
 				currentPosition = newPosition;	
 			} else if (currentPosition.getX() < newPosition.getX()) {
-				// going right in graph
+				//going right in graph
 				drawing[currentPosition.getY()][currentPosition.getX()] = "+";
 				
 				for (int i = currentPosition.getX() + 1; i < newPosition.getX() - 1; i++) {
@@ -86,7 +94,8 @@ public class Envelop {
 		
 		for (int i = HEIGHT; i >= 0; i--) {
 			if (i == HEIGHT || i % 5 == 0) { //adds y axis labels (multiples of 5 and max)
-				lines.append(" ".repeat(heightDigits - String.valueOf(i).length())); //aligns digits in labels
+				//aligns digits in labels
+				lines.append(" ".repeat(heightDigits - String.valueOf(i).length()));
 				lines.append(String.valueOf(i));
 				lines.append(" .");
 			}

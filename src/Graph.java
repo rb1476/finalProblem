@@ -10,7 +10,7 @@ public class Graph {
 		sortXCoords();
 	}
 	
-	public List<XCoord> makeXCoords() {
+	private List<XCoord> makeXCoords() {
 		List<XCoord> newValues = new ArrayList<XCoord>();
 		
 		for (Bar i : bars) {
@@ -23,19 +23,46 @@ public class Graph {
 		return newValues;
 	}
 	
-	public static void sortXCoords() {
+	private static void sortXCoords() {
 		values.sort(Comparator.comparing(XCoord::getValue));
+	}
+	
+	public List<Bar> getBars() {
+		return bars;
+	}
+	
+	public void setBars(List<Bar> bars) {
+		this.bars = bars;
 	}
 	
 	public List<XCoord> getXCoords() {
 		return values;
 	}
 	
+	@SuppressWarnings("static-access")
 	public void setXCoords(List<XCoord> values) {
-		Graph.values = values;
+		this.values = values;
 	}
 	
 	public int getSize() {
-		return values.size();
+		return bars.size();
+	}
+	
+	public Bar maxBar() {
+		Bar largest = new Bar(0, 0, 0);
+		
+		for (Bar bar : bars) {
+			if (bar.getHeight() < largest.getHeight()) {
+				largest = bar;
+			}
+		}
+		
+		return largest;
+	}
+	
+	public Graph removeBar() {
+		bars.remove(maxBar());
+		
+		return new Graph(bars);
 	}
 }
