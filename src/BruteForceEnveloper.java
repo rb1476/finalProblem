@@ -59,8 +59,9 @@ public class BruteForceEnveloper extends Enveloper {
 			boolean adjacentLeft = yPairsLeft.anyMatch(n -> (i.getX() < n.getX()
 					&& n.getX() < leftBound));
 			
-			//are there even number of coords of same y value to left of coord and is it adjacent left to bar?
-			if (i.getX() < leftBound && leftPairsNo % 2 == 0 && adjacentLeft) {
+			//is coord adjacent to bar?
+			//and are there even number of coords of same y value left of it or is it on x axis?
+			if (i.getX() < leftBound && adjacentLeft && (leftPairsNo % 2 == 0 || i.getX() == 0)) {
 				//adds coord to pair with coord at left boundary
 				points.add(new Coord(leftBound, i.getY()));
 				continue;
@@ -75,11 +76,32 @@ public class BruteForceEnveloper extends Enveloper {
 			boolean adjacentRight = yPairsRight.anyMatch(n -> (rightBound < n.getX()
 					&& n.getX() < i.getX()));
 			
-			//are there even number of coords of same y value to right of coord and is it adjacent right to bar?
-			if (i.getX() > rightBound && rightPairsNo % 2 == 0 && adjacentRight) {
+			//is coord adjacent to bar?
+			//and are there even number of coords of same y value right of it or is it on x axis?
+			if (i.getX() > rightBound && adjacentRight && (rightPairsNo % 2 == 0 || i.getX() == 0)) {
 				//adds coord to pair with coord at right boundary
 				points.add(new Coord(rightBound, i.getY()));
 			}
+		}
+		
+		//counts number of bar corners left of new bar taller than it
+		int barCornersLeft = (int)points.stream().filter(n -> (n.getY() > topBound
+				&& n.getX() < leftBound)).count();
+		
+		//counts number of bar corners right of new bar taller than it
+		int barCornersRight = (int)points.stream().filter(n -> (n.getY() > topBound
+				&& n.getX() > rightBound)).count();
+		
+		//do none of taller bars to left of new bar overlap it?
+		if (barCornersLeft % 2 == 0) {
+			//adds left corner of new bar
+			points.add(new Coord(leftBound, topBound));
+		}
+		
+		//do none of taller bars to right of new bar overlap it?
+		if (barCornersRight % 2 == 0) {
+			//adds right corner of new bar
+			points.add(new Coord(rightBound, topBound));
 		}
 		
 		return new Envelop(points);
