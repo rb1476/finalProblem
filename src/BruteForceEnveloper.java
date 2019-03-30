@@ -31,6 +31,8 @@ public class BruteForceEnveloper extends Enveloper {
 	
 	private Envelop merge(Envelop e, Bar bar) {
 		List<Coord> points = e.getCoords();
+		//makes stream of coords
+		Stream<Coord> pointsStream = points.stream();
 		//boundaries of bar
 		int leftBound = bar.getStartX();
 		int topBound = bar.getHeight();
@@ -42,54 +44,44 @@ public class BruteForceEnveloper extends Enveloper {
 				&& n.getX() <= rightBound));
 		
 		for (Coord i : points) { //adds coords for all lines contacting boundaries
-			//counts number of coords at that x value
-			int xPair = (int)points.stream().filter(n -> (n.getX() == i.getX())).count();
-			
-			if (xPair != 2) { //adds coord at boundary if coord doesn't have pair going down
-				points.add(new Coord(i.getX(), topBound));
-				continue;
-			}
-			
-			//makes stream of coords of same y value to left of coord
-			Stream<Coord> yPairsLeft = points.stream().filter(n -> (n.getY() == i.getY()) 
-					&& n.getX() < i.getX());
-			//counts number of coords of same y value to left of coord
-			int leftPairsNo = (int)yPairsLeft.count();
-			//are there no coords of same y value between coord and bar?
-			boolean adjacentLeft = yPairsLeft.anyMatch(n -> (i.getX() < n.getX()
-					&& n.getX() < leftBound));
-			
-			//is coord adjacent to bar?
-			//and are there even number of coords of same y value left of it or is it on x axis?
-			if (i.getX() < leftBound && adjacentLeft && (leftPairsNo % 2 == 0 || i.getX() == 0)) {
-				//adds coord to pair with coord at left boundary
-				points.add(new Coord(leftBound, i.getY()));
-				continue;
-			}
-
-			//makes stream of coords of same y value to right of coord
-			Stream<Coord> yPairsRight = points.stream().filter(n -> (n.getY() == i.getY()) 
-					&& n.getX() > i.getX());
-			//counts number of coords of same y value to right of coord
-			int rightPairsNo = (int)yPairsRight.count();
-			//are there no coords of same y value between coord and bar?
-			boolean adjacentRight = yPairsRight.anyMatch(n -> (rightBound < n.getX()
-					&& n.getX() < i.getX()));
-			
-			//is coord adjacent to bar?
-			//and are there even number of coords of same y value right of it or is it on x axis?
-			if (i.getX() > rightBound && adjacentRight && (rightPairsNo % 2 == 0 || i.getX() == 0)) {
-				//adds coord to pair with coord at right boundary
-				points.add(new Coord(rightBound, i.getY()));
+			if (i.getX() < leftBound) {
+				//are there no coords of same y value between coord and bar?
+				boolean adjacentLeft = pointsStream.anyMatch(n -> (i.getX() < n.getX()
+						&& n.getX() < leftBound));
+				
+				//is coord adjacent to bar?
+				if (adjacentLeft) {
+					//adds coord to pair with coord at left boundary
+					points.add(new Coord(leftBound, i.getY()));
+					continue;
+				}
+			} else if (leftBound <= i.getX() && i.getX() <= rightBound) {
+				//counts number of coords at that x value
+				int xPair = (int)pointsStream.filter(n -> (n.getX() == i.getX())).count();
+				
+				if (xPair != 2) { //adds coord at boundary if coord doesn't have pair going down
+					points.add(new Coord(i.getX(), topBound));
+					continue;
+				}
+			} else if (rightBound < i.getX()) {
+				//are there no coords of same y value between coord and bar?
+				boolean adjacentRight = pointsStream.anyMatch(n -> (rightBound < n.getX()
+						&& n.getX() < i.getX()));
+				
+				//is coord adjacent to bar??
+				if (adjacentRight) {
+					//adds coord to pair with coord at right boundary
+					points.add(new Coord(rightBound, i.getY()));
+				}
 			}
 		}
 		
 		//counts number of bar corners left of new bar taller than it
-		int barCornersLeft = (int)points.stream().filter(n -> (n.getY() > topBound
+		int barCornersLeft = (int)pointsStream.filter(n -> (n.getY() > topBound
 				&& n.getX() < leftBound)).count();
 		
 		//counts number of bar corners right of new bar taller than it
-		int barCornersRight = (int)points.stream().filter(n -> (n.getY() > topBound
+		int barCornersRight = (int)pointsStream.filter(n -> (n.getY() > topBound
 				&& n.getX() > rightBound)).count();
 		
 		//do none of taller bars to left of new bar overlap it?
